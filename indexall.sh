@@ -18,6 +18,9 @@ with open(private_key_file, 'r') as f:
 
 payload = {
     'sub': 'admin',
+    # dserver requires audience and issuer (default "dserver")
+    'aud': os.environ.get('JWT_DECODE_AUDIENCE', '').strip() or 'dserver',
+    'iss': os.environ.get('JWT_DECODE_ISSUER', '').strip() or 'dserver',
     'iat': datetime.now(timezone.utc),
     'exp': datetime.now(timezone.utc) + timedelta(hours=1),
     'fresh': True

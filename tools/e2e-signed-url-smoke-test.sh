@@ -54,7 +54,10 @@ with open(key_file) as f:
 now = datetime.now(timezone.utc)
 print(jwt.encode(
     {'sub': 'admin', 'iat': now, 'exp': now + timedelta(hours=1),
-     'fresh': True},
+     'fresh': True,
+     # dserver requires audience and issuer (default "dserver")
+     'aud': os.environ.get('JWT_DECODE_AUDIENCE', '').strip() or 'dserver',
+     'iss': os.environ.get('JWT_DECODE_ISSUER', '').strip() or 'dserver'},
     private_key, algorithm='RS256'))
 PYTHON_SCRIPT
 )
