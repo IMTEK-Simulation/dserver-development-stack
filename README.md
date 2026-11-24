@@ -11,7 +11,7 @@ This repository provides a complete development environment for:
 
 - **dserver** - REST API for registering, looking up, and searching dtool dataset metadata
 - **dtool-lookup-webapp** - Vue.js web frontend for searching datasets
-- **MinIO** - S3-compatible object storage for datasets
+- **SeaweedFS** - S3-compatible object storage for datasets
 - **PostgreSQL** - SQL database for dserver admin metadata
 - **MongoDB** - NoSQL database for dataset search and retrieval
 
@@ -50,7 +50,7 @@ devbox shell
 ```
 
 On first entry this:
-- installs all Nix packages (Python, Node, PostgreSQL, MongoDB, MinIO, …),
+- installs all Nix packages (Python, Node, PostgreSQL, MongoDB, SeaweedFS, …),
 - builds the Python virtual environment (`.venv`) with every dserver package in
   editable mode,
 - installs the Node dependencies for the webapp, and
@@ -64,7 +64,7 @@ Subsequent entries are fast.
 devbox services up
 ```
 
-This brings up PostgreSQL, MongoDB, MinIO (with bucket initialization), the
+This brings up PostgreSQL, MongoDB, SeaweedFS (with bucket initialization), the
 dserver API, and the webapp, respecting health checks and start-up order.
 Runtime data is stored under `.devbox-data/` (gitignored); every service binds
 to `127.0.0.1` on the ports listed below. Stop the stack with `Ctrl-C` (or
@@ -76,7 +76,7 @@ to `127.0.0.1` on the ports listed below. Stop the stack with `Ctrl-C` (or
 |---------|------|-------------|
 | **dserver** | 5000 | REST API for dataset metadata (includes token generator) |
 | **webapp** | 8080 | Vue.js frontend |
-| **minio** | 9000 (API), 9001 (Console) | S3-compatible storage |
+| **seaweedfs** | 9000 (S3 API) | S3-compatible storage |
 | **postgres** | 5432 | PostgreSQL database |
 | **mongo** | 27017 | MongoDB database |
 
@@ -88,7 +88,9 @@ to `127.0.0.1` on the ports listed below. Stop the stack with `Ctrl-C` (or
 | `devbox services up` | Start the full stack |
 | `devbox services up index-s3` | Also run the on-demand dataset indexer |
 | `devbox run index` | Index `s3://dtool-bucket` into dserver |
-| `devbox run create-test-dataset` | Create, push and index a sample dataset |
+| `devbox run seed-demo-data` | Create and index demonstration datasets with dependencies (`-- --force` for another set) |
+| `devbox run add-user <name>` | Register a user (e.g. your ORCID iD) as admin with access to `s3://dtool-bucket` (`--no-admin` for a regular user) |
+| `devbox run create-test-dataset` | Create, push and index a single sample dataset |
 | `devbox run psql` | Open a `psql` shell on the dserver database |
 | `devbox run rebuild-venv` | Delete and rebuild `.venv` |
 | `devbox run clean-data` | Remove the `.devbox-data/` runtime data |
@@ -103,11 +105,34 @@ OAuth2 credentials are read from a local `.env` file — copy `.env.template` to
 - **dserver API**: http://127.0.0.1:5000
 - **API Documentation**: http://127.0.0.1:5000/doc/swagger (requires authentication)
 - **Webapp**: http://127.0.0.1:8080
-- **MinIO Console**: http://127.0.0.1:9001 (credentials: `minioadmin` / `minioadmin`)
+- **S3 storage (SeaweedFS)**: http://127.0.0.1:9000 (credentials: `admin` / `secret12`), e.g. `aws --endpoint-url http://127.0.0.1:9000 s3 ls s3://dtool-bucket` inside `devbox shell`
+
+### Demonstration data
+
+Fill the stack with demonstration datasets: nine small datasets of a
+measurement and simulation project, with README metadata, tags, annotations
+and dependencies between them, so that search and the dependency graph have
+something to show:
+
+```bash
+devbox run seed-demo-data
+```
+
+```
+raw-scan-a ─┐
+raw-scan-b ─┼─> processed-topographies ─> roughness-analysis ─┬─> figures
+calibration ┘                                                 │
+simulation-input ─> simulation-results ───────────────────────┴─> comparison
+```
+
+Dependencies are recorded in each README (`derived_from: [{uuid: ...}]`) and,
+for `demo-figures`, as annotation `source_dataset_uuid`. Running the command
+again does nothing while demo datasets exist; `devbox run seed-demo-data --
+--force` adds another set. Search for `demo` in the webapp.
 
 ### Create a test dataset
 
-To create a sample dataset, push it to MinIO and index it in dserver:
+To create a sample dataset, push it to SeaweedFS and index it in dserver:
 
 ```bash
 devbox run create-test-dataset
@@ -115,7 +140,7 @@ devbox run create-test-dataset
 
 ### Index existing datasets from S3
 
-If you have datasets in the MinIO bucket, index them with:
+If you have datasets in the `dtool-bucket` bucket, index them with:
 
 ```bash
 devbox run index
@@ -123,7 +148,7 @@ devbox run index
 
 ### Push datasets from the command line
 
-You can push datasets directly to the MinIO S3 storage using the `dtool`
+You can push datasets directly to the S3 storage (SeaweedFS) using the `dtool`
 command line tool. Inside `devbox shell` the `dtool` CLI is already on the
 `PATH`; on a separate host machine, install it with `pip install dtool dtool-s3`.
 
@@ -139,8 +164,8 @@ Or set the environment variables directly:
 
 ```bash
 export DTOOL_S3_ENDPOINT_dtool-bucket="http://127.0.0.1:9000"
-export DTOOL_S3_ACCESS_KEY_ID_dtool-bucket="minioadmin"
-export DTOOL_S3_SECRET_ACCESS_KEY_dtool-bucket="minioadmin"
+export DTOOL_S3_ACCESS_KEY_ID_dtool-bucket="admin"
+export DTOOL_S3_SECRET_ACCESS_KEY_dtool-bucket="secret12"
 export DTOOL_S3_DISABLE_BUCKET_VERSIONING_dtool-bucket=true
 ```
 
@@ -201,31 +226,32 @@ Authentication is provided by the OAuth2 token generator plugin
 token:
 
 **1. Browser (OAuth2 / ORCID login)** — the webapp's login button drives this.
-It redirects through `GET /auth/login` → the provider → `GET /auth/callback`,
-and requires `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` in your `.env`.
+It redirects through `GET /auth/oauth2/login` → ORCID → `GET
+/auth/oauth2/callback`. It needs:
 
-**2. Headless API key** — `POST /auth/token` exchanges an API key for a JWT.
-This requires `OAUTH2_API_KEY` to be set in the environment:
+- `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` of an ORCID API client in your
+  `.env` (from https://orcid.org/developer-tools);
+- the redirect URI `http://127.0.0.1:5000/auth/oauth2/callback` registered for
+  that client in ORCID's developer tools;
+- your ORCID iD registered in dserver, as the plugin does not create users:
+  `devbox run add-user <your ORCID iD>`.
 
-```bash
-curl -X POST http://127.0.0.1:5000/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"api_key": "<your-OAUTH2_API_KEY>", "username": "admin"}'
-```
+**2. Command line** — `dtool dserver login 127.0.0.1:5000` shows a code, which
+you approve in the webapp after logging in there (see 1.). The token is
+stored in your dtool config file and used for `dserver://127.0.0.1:5000/...`.
 
 **3. Local development (no OAuth provider needed)** — sign a JWT directly with
-the server's private key. This is what `indexall.sh` does:
+the server's private key, as `indexall.sh` does. dserver requires audience and
+issuer `dserver`:
 
 ```bash
 TOKEN=$(python - <<'PY'
 import jwt, datetime
-key = open("jwt/jwt_key").read()
+now = datetime.datetime.now(datetime.timezone.utc)
 print(jwt.encode({
-    "sub": "admin", "username": "admin",
-    "iat": datetime.datetime.now(datetime.timezone.utc),
-    "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1),
-    "fresh": True,
-}, key, algorithm="RS256"))
+    "sub": "admin", "aud": "dserver", "iss": "dserver",
+    "iat": now, "exp": now + datetime.timedelta(hours=1), "fresh": True,
+}, open("jwt/jwt_key").read(), algorithm="RS256"))
 PY
 )
 
@@ -306,10 +332,12 @@ The per-bucket `DTOOL_S3_*_dtool-bucket` settings contain hyphens, which a
 shell `export` (and therefore the `devbox.json` `env` block) cannot represent.
 They are injected into the relevant processes by `devbox/with-dtool-s3.sh`.
 
-### S3/MinIO
+### S3 (SeaweedFS)
 
-The stack creates a bucket named `dtool-bucket` on MinIO and makes it publicly
-readable. Because everything runs on `127.0.0.1`, datasets are reachable at the
+The stack creates a bucket named `dtool-bucket` on SeaweedFS, which is
+publicly readable (anonymous identity in `devbox/seaweedfs/s3.json`) and allows
+cross-origin requests (`devbox/seaweedfs/cors.json`). SeaweedFS replaces MinIO,
+which is abandoned upstream and no longer installable from Nixpkgs. Because everything runs on `127.0.0.1`, datasets are reachable at the
 same URLs from both the server and the host — no `/etc/hosts` entry needed.
 
 ## Submodules
