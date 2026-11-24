@@ -16,7 +16,7 @@ set -o nounset
 
 exec env \
     "DTOOL_S3_ENDPOINT_dtool-bucket=http://127.0.0.1:9000" \
-    "DTOOL_S3_ACCESS_KEY_ID_dtool-bucket=minioadmin" \
-    "DTOOL_S3_SECRET_ACCESS_KEY_dtool-bucket=minioadmin" \
+    "DTOOL_S3_ACCESS_KEY_ID_dtool-bucket=admin" \
+    "DTOOL_S3_SECRET_ACCESS_KEY_dtool-bucket=secret12" \
     "DTOOL_S3_DISABLE_BUCKET_VERSIONING_dtool-bucket=true" \
     "$@"
