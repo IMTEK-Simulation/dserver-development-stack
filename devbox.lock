@@ -1,6 +1,56 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "awscli2@latest": {
+      "last_modified": "2026-10-02T22:55:44Z",
+      "resolved": "github:NixOS/nixpkgs/55ba7f49ef2962b42cbd126522b7df5f95037679#awscli2",
+      "source": "devbox-search",
+      "version": "2.35.11",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bz0ghsayh5s01kb5dzfvjg2gprm3mzgs-awscli2-2.35.11",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/np7j58p2gnz2z1nhy3zq4fa1c7ga3vyb-awscli2-2.35.11-dist"
+            }
+          ],
+          "store_path": "/nix/store/bz0ghsayh5s01kb5dzfvjg2gprm3mzgs-awscli2-2.35.11"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8w6w9a1si0nj507gi4gy4a6gj1ggnf3p-awscli2-2.35.11",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/xm5m56hzf2jbh0a9ny19z14802vf4nbw-awscli2-2.35.11-dist"
+            }
+          ],
+          "store_path": "/nix/store/8w6w9a1si0nj507gi4gy4a6gj1ggnf3p-awscli2-2.35.11"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4yabndm9y4046zcsbhrhvn3azqv06ly4-awscli2-2.35.11",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/id82qrxwjdwpkk8kd0cs35cwmmlfzq1n-awscli2-2.35.11-dist"
+            }
+          ],
+          "store_path": "/nix/store/4yabndm9y4046zcsbhrhvn3azqv06ly4-awscli2-2.35.11"
+        }
+      }
+    },
     "curl@latest": {
       "last_modified": "2025-12-05T15:03:55Z",
       "resolved": "github:NixOS/nixpkgs/a672be65651c80d3f592a89b3945466584a22069#curl",
@@ -122,90 +172,6 @@
             }
           ],
           "store_path": "/nix/store/0rfz69vp1nl0q2hxzig20hc60sk72z62-curl-8.17.0-bin"
-        }
-      }
-    },
-    "gcc@latest": {
-      "last_modified": "2026-05-21T08:15:18Z",
-      "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#gcc16",
-      "source": "devbox-search",
-      "version": "16.1.0",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/rxibjsv6kbn68yv4yxm2j7gpjpzqxylm-gcc-wrapper-16.1.0",
-              "default": true
-            },
-            {
-              "name": "man",
-              "path": "/nix/store/9zslvcy97r8gdv6j67fvbvzz85s98dfz-gcc-wrapper-16.1.0-man",
-              "default": true
-            },
-            {
-              "name": "info",
-              "path": "/nix/store/yrf34jg30y5znsllb2skx7cq2x2faxjk-gcc-wrapper-16.1.0-info"
-            }
-          ],
-          "store_path": "/nix/store/rxibjsv6kbn68yv4yxm2j7gpjpzqxylm-gcc-wrapper-16.1.0"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/435jmzq063lkllbzrncw8c2frp772zal-gcc-wrapper-16.1.0",
-              "default": true
-            },
-            {
-              "name": "man",
-              "path": "/nix/store/7301n7w2g1x5z211gcxz4gmzaaykykis-gcc-wrapper-16.1.0-man",
-              "default": true
-            },
-            {
-              "name": "info",
-              "path": "/nix/store/xln7vgjrqcv00p53c62914r8nw3ar34x-gcc-wrapper-16.1.0-info"
-            }
-          ],
-          "store_path": "/nix/store/435jmzq063lkllbzrncw8c2frp772zal-gcc-wrapper-16.1.0"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/2swyyj4x870fql28jgbd838xi3qhzj4x-gcc-wrapper-16.1.0",
-              "default": true
-            },
-            {
-              "name": "man",
-              "path": "/nix/store/chw8n9c9kafifh1rnmcni9hjlnzq6cgl-gcc-wrapper-16.1.0-man",
-              "default": true
-            },
-            {
-              "name": "info",
-              "path": "/nix/store/vpi9cwhpvjr200aqwryl16nbsypv7isi-gcc-wrapper-16.1.0-info"
-            }
-          ],
-          "store_path": "/nix/store/2swyyj4x870fql28jgbd838xi3qhzj4x-gcc-wrapper-16.1.0"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/1yyps6cg0vyigp1q6iyy92l2habli99s-gcc-wrapper-16.1.0",
-              "default": true
-            },
-            {
-              "name": "man",
-              "path": "/nix/store/xi0rbkik9hai1b4yf853j6gmky7v6lld-gcc-wrapper-16.1.0-man",
-              "default": true
-            },
-            {
-              "name": "info",
-              "path": "/nix/store/ydqkn5iwm5d50491nal33rn4wm8f76kl-gcc-wrapper-16.1.0-info"
-            }
-          ],
-          "store_path": "/nix/store/1yyps6cg0vyigp1q6iyy92l2habli99s-gcc-wrapper-16.1.0"
         }
       }
     },
@@ -509,102 +475,6 @@
         }
       }
     },
-    "minio-client@latest": {
-      "last_modified": "2026-05-21T08:15:18Z",
-      "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#minio-client",
-      "source": "devbox-search",
-      "version": "2025-08-13T08-35-41Z",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/67y2fixzwja8wbhyfdsm4i2fndrw96yw-minio-client-2025-08-13T08-35-41Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/67y2fixzwja8wbhyfdsm4i2fndrw96yw-minio-client-2025-08-13T08-35-41Z"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/09v4qkz2lm79gpd103139mlgakh47s95-minio-client-2025-08-13T08-35-41Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/09v4qkz2lm79gpd103139mlgakh47s95-minio-client-2025-08-13T08-35-41Z"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/2cd7w27a6jrawppgnwv9s9grw0043flm-minio-client-2025-08-13T08-35-41Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/2cd7w27a6jrawppgnwv9s9grw0043flm-minio-client-2025-08-13T08-35-41Z"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/q15z5dfnicv9qsz56qxmmv9vlqipcqyw-minio-client-2025-08-13T08-35-41Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/q15z5dfnicv9qsz56qxmmv9vlqipcqyw-minio-client-2025-08-13T08-35-41Z"
-        }
-      }
-    },
-    "minio@latest": {
-      "last_modified": "2026-05-21T08:15:18Z",
-      "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#minio",
-      "source": "devbox-search",
-      "version": "2025-10-15T17-29-55Z",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/zn12rvc0d9igapz9s548dca4j474nnnx-minio-2025-10-15T17-29-55Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/zn12rvc0d9igapz9s548dca4j474nnnx-minio-2025-10-15T17-29-55Z"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/3gs8cl5i9nfvsz7099yg5fdgffqcghwy-minio-2025-10-15T17-29-55Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/3gs8cl5i9nfvsz7099yg5fdgffqcghwy-minio-2025-10-15T17-29-55Z"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/dcgmn79lgdgl7x8shznjxjp2mn691xy1-minio-2025-10-15T17-29-55Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/dcgmn79lgdgl7x8shznjxjp2mn691xy1-minio-2025-10-15T17-29-55Z"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/l102ycjqjjgg6wzcdik9xsq8fah7igf6-minio-2025-10-15T17-29-55Z",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/l102ycjqjjgg6wzcdik9xsq8fah7igf6-minio-2025-10-15T17-29-55Z"
-        }
-      }
-    },
     "mongodb-ce@8.0.15": {
       "last_modified": "2025-11-23T21:50:36Z",
       "resolved": "github:NixOS/nixpkgs/ee09932cedcef15aaf476f9343d1dea2cb77e261#mongodb-ce",
@@ -703,7 +573,7 @@
     },
     "nodejs@22": {
       "last_modified": "2026-05-21T08:15:18Z",
-      "plugin_version": "0.0.3",
+      "plugin_version": "0.0.4",
       "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#nodejs_22",
       "source": "devbox-search",
       "version": "22.22.3",
@@ -1001,7 +871,7 @@
     },
     "python@3.12": {
       "last_modified": "2026-05-21T08:15:18Z",
-      "plugin_version": "0.0.4",
+      "plugin_version": "0.0.5",
       "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#python312",
       "source": "devbox-search",
       "version": "3.12.13",
@@ -1053,6 +923,44 @@
             }
           ],
           "store_path": "/nix/store/lpgczl8hqnjlkicsphcylqfgds7dqc13-python3-3.12.13"
+        }
+      }
+    },
+    "seaweedfs@latest": {
+      "last_modified": "2026-10-02T22:55:44Z",
+      "resolved": "github:NixOS/nixpkgs/55ba7f49ef2962b42cbd126522b7df5f95037679#seaweedfs",
+      "source": "devbox-search",
+      "version": "4.48",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/39xhcz6zc43x7mjz8c22r3pn2d9fansz-seaweedfs-4.48",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/39xhcz6zc43x7mjz8c22r3pn2d9fansz-seaweedfs-4.48"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/7562icxxxyhhxk1in17xhcampnl89cbz-seaweedfs-4.48",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/7562icxxxyhhxk1in17xhcampnl89cbz-seaweedfs-4.48"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/f2c2z94alv369kf3y4xm30nc2f17k1n0-seaweedfs-4.48",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/f2c2z94alv369kf3y4xm30nc2f17k1n0-seaweedfs-4.48"
         }
       }
     }

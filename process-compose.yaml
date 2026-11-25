@@ -51,29 +51,36 @@ processes:
       restart: "no"
 
   # ==========================================================================
-  # MinIO - S3-compatible object storage + bucket initialization
+  # SeaweedFS - S3-compatible object storage + bucket initialization
   # ==========================================================================
-  minio:
-    command: "bash $DEVBOX_PROJECT_ROOT/devbox/minio.sh"
+  seaweedfs:
+    command: "bash $DEVBOX_PROJECT_ROOT/devbox/seaweedfs.sh"
     availability:
       restart: on_failure
+      backoff_seconds: 2
+      max_restarts: 5
     readiness_probe:
-      http_get:
-        host: 127.0.0.1
-        port: 9000
-        path: /minio/health/live
-      initial_delay_seconds: 2
+      exec:
+        # Ready only once an authenticated S3 request succeeds: the gateway
+        # answers HTTP (403) before its identities from s3.json are loaded
+        # and the filer behind it serves, and requests fail until then.
+        command: "aws --endpoint-url http://127.0.0.1:9000 s3api list-buckets"
+      # The S3 gateway is the last thing `weed server` brings up (~10s).
+      initial_delay_seconds: 5
       period_seconds: 3
-      timeout_seconds: 5
-      failure_threshold: 20
+      timeout_seconds: 10
+      failure_threshold: 40
 
-  minio-init:
-    command: "bash $DEVBOX_PROJECT_ROOT/devbox/minio-init.sh"
+  seaweedfs-init:
+    command: "bash $DEVBOX_PROJECT_ROOT/devbox/seaweedfs-init.sh"
     depends_on:
-      minio:
+      seaweedfs:
         condition: process_healthy
     availability:
-      restart: "no"
+      # The script retries itself; restart once more if it still fails.
+      restart: on_failure
+      backoff_seconds: 5
+      max_restarts: 2
 
   # ==========================================================================
   # dserver - Flask REST API for dataset metadata
@@ -85,10 +92,14 @@ processes:
         condition: process_completed_successfully
       mongo-init:
         condition: process_completed_successfully
-      minio-init:
+      seaweedfs-init:
         condition: process_completed_successfully
     availability:
+      # Bounded, so a broken environment shows up as a failed service instead
+      # of an endless restart loop (see the dserver log for the cause).
       restart: on_failure
+      backoff_seconds: 3
+      max_restarts: 5
     readiness_probe:
       http_get:
         host: 127.0.0.1

@@ -19,16 +19,17 @@
 #   DSERVER_TOKEN (default: signed locally with the stack's JWT key;
 #                  requires PyJWT in $PYTHON)
 #   PYTHON       (default python3)
-#   STORAGE_CONNECT_TO (default minio:9000:localhost:9000 — routes the
-#                  container-internal storage hostname to the host-mapped
-#                  port without invalidating SigV4 signatures)
+#   STORAGE_CONNECT_TO (curl --connect-to mapping for storage requests,
+#                  e.g. storage:9000:localhost:9000 if dserver signs URLs for
+#                  a hostname the host cannot resolve; the default is a no-op,
+#                  as the devbox stack signs URLs for 127.0.0.1)
 
 set -euo pipefail
 
 DSERVER_URL=${DSERVER_URL:-http://localhost:5000}
 BASE_URI=${BASE_URI:-s3://dtool-bucket}
 PYTHON=${PYTHON:-python3}
-STORAGE_CONNECT_TO=${STORAGE_CONNECT_TO:-minio:9000:localhost:9000}
+STORAGE_CONNECT_TO=${STORAGE_CONNECT_TO:-127.0.0.1:9000:127.0.0.1:9000}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Storage requests go to the URL exactly as signed, but connect to the

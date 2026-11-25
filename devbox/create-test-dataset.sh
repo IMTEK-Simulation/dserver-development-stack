@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Create a sample dataset, push it to MinIO and index it in dserver.
+# Create a sample dataset, push it to SeaweedFS and index it in dserver.
 # Mirrors compose/dserver/scripts/create-test-dataset.sh.
 set -o errexit
 set -o pipefail

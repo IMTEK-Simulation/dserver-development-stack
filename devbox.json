@@ -10,10 +10,9 @@
     },
     "mongodb-ce": "8.0.15",
     "mongosh": "latest",
-    "minio": "latest",
-    "minio-client": "latest",
+    "seaweedfs": "latest",
+    "awscli2": "latest",
     "openssl": "latest",
-    "gcc": "latest",
     "gnumake": "latest",
     "curl": "latest",
     "jq": "latest",
@@ -23,7 +22,7 @@
     "FLASK_APP": "dservercore",
     "FLASK_DEBUG": "1",
 
-    "SQLALCHEMY_DATABASE_URI": "postgresql://dserver:dserver_secret@127.0.0.1:5432/dserver",
+    "SQLALCHEMY_DATABASE_URI": "postgresql+psycopg://dserver:dserver_secret@127.0.0.1:5432/dserver",
 
     "SEARCH_MONGO_URI": "mongodb://dserver:dserver_secret@127.0.0.1:27017/?authSource=admin",
     "SEARCH_MONGO_DB": "dserver",
@@ -46,8 +45,9 @@
 
     "CORS_ALLOW_ORIGIN": "*",
 
-    "AWS_ACCESS_KEY_ID": "minioadmin",
-    "AWS_SECRET_ACCESS_KEY": "minioadmin",
+    "AWS_ACCESS_KEY_ID": "admin",
+    "AWS_SECRET_ACCESS_KEY": "secret12",
+    "AWS_DEFAULT_REGION": "us-east-1",
 
     "SIGNED_URL_READ_EXPIRY_SECONDS": "3600",
     "SIGNED_URL_WRITE_EXPIRY_SECONDS": "14400",
@@ -65,12 +65,10 @@
     "OAUTH2_LOGIN_SUCCESS_REDIRECT": "http://127.0.0.1:8080",
     "OAUTH2_LOGIN_ERROR_REDIRECT": "http://127.0.0.1:8080/login?error=auth_failed",
 
-    "MINIO_ROOT_USER": "minioadmin",
-    "MINIO_ROOT_PASSWORD": "minioadmin",
-    "MINIO_API_CORS_ALLOW_ORIGIN": "*",
-
     "VUE_APP_DTOOL_LOOKUP_SERVER_URL": "http://127.0.0.1:5000",
-    "VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL": "http://127.0.0.1:5000/auth/token",
+    "VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL": "http://127.0.0.1:5000/auth/oauth2/token",
+    "VUE_APP_DTOOL_LOOKUP_SERVER_AUTH_LOGOUT_URL": "http://127.0.0.1:5000/auth/oauth2/logout",
+    "VUE_APP_OAUTH2_LOGIN_URL": "http://127.0.0.1:5000/auth/oauth2/login",
     "VUE_APP_OAUTH2_ENABLED": "true",
     "VUE_APP_OAUTH2_PROVIDER_NAME": "ORCID",
     "VUE_APP_SHOW_USERNAME_PASSWORD_FORM": "false"
@@ -85,6 +83,12 @@
       ],
       "create-test-dataset": [
         "bash $DEVBOX_PROJECT_ROOT/devbox/with-dtool-s3.sh bash $DEVBOX_PROJECT_ROOT/devbox/create-test-dataset.sh"
+      ],
+      "add-user": [
+        "bash $DEVBOX_PROJECT_ROOT/devbox/add-user.sh \"$@\""
+      ],
+      "seed-demo-data": [
+        "bash $DEVBOX_PROJECT_ROOT/devbox/with-dtool-s3.sh bash $DEVBOX_PROJECT_ROOT/devbox/seed-demo-data.sh \"$@\""
       ],
       "rebuild-venv": [
         "rm -rf $DEVBOX_PROJECT_ROOT/.venv",
