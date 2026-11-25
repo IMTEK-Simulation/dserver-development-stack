@@ -209,10 +209,16 @@ URIs have the form `dserver://<server>/<backend>/<bucket>[/<uuid>]`, where
 `<backend>://<bucket>` on the server:
 
 ```bash
-dtool ls dserver://127.0.0.1:5000/s3/dtool-bucket/
-dtool cp dserver://127.0.0.1:5000/s3/dtool-bucket/<uuid> ./local-copy/
-dtool cp my-dataset dserver://127.0.0.1:5000/s3/dtool-bucket/
+dtool dserver login http://127.0.0.1:8080       # the webapp's address, see below
+dtool ls dserver://127.0.0.1:8080/              # all datasets you can search
+dtool ls dserver://127.0.0.1:8080/s3/dtool-bucket/
+dtool cp dserver://127.0.0.1:8080/s3/dtool-bucket/<uuid> ./local-copy/
+dtool cp my-dataset dserver://127.0.0.1:8080/s3/dtool-bucket/
 ```
+
+The webapp names its dserver in its page, so `dtool` finds the API on port
+5000; logging in to `127.0.0.1:5000` directly works as well, with
+`dserver://127.0.0.1:5000/...` URIs.
 
 **Benefits:**
 - No need for S3/Azure credentials on client machines
@@ -236,9 +242,10 @@ It redirects through `GET /auth/oauth2/login` → ORCID → `GET
 - your ORCID iD registered in dserver, as the plugin does not create users:
   `devbox run add-user <your ORCID iD>`.
 
-**2. Command line** — `dtool dserver login 127.0.0.1:5000` shows a code, which
-you approve in the webapp after logging in there (see 1.). The token is
-stored in your dtool config file and used for `dserver://127.0.0.1:5000/...`.
+**2. Command line** — `dtool dserver login http://127.0.0.1:8080` (the
+webapp's address) shows a code, which you approve in the webapp after logging
+in there (see 1.). The token is stored in your dtool config file and used for
+`dserver://127.0.0.1:8080/...`.
 
 **3. Local development (no OAuth provider needed)** — sign a JWT directly with
 the server's private key, as `indexall.sh` does. dserver requires audience and
