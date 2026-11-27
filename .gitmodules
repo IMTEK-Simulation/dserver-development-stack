@@ -10,9 +10,9 @@
 [submodule "dservercore"]
 	path = dservercore
 	url = git@github.com:jic-dtool/dservercore.git
-[submodule "dtool-lookup-webapp"]
-	path = dtool-lookup-webapp
-	url = git@github.com:jic-dtool/dtool-lookup-webapp.git
+[submodule "dserver-webapp"]
+	path = dserver-webapp
+	url = git@github.com:jic-dtool/dserver-webapp.git
 [submodule "dserver-dependency-graph-plugin"]
 	path = dserver-dependency-graph-plugin
 	url = git@github.com:jic-dtool/dserver-dependency-graph-plugin.git

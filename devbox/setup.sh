@@ -48,7 +48,7 @@ fi
 # client sources, the dependencies or setup-webapp.sh change; otherwise the
 # webapp compiles against an outdated client. The stamp lives in the
 # webapp's node_modules, so deleting that directory also forces a rebuild.
-WEBAPP_DIR="$ROOT/dtool-lookup-webapp/dtool-lookup-webapp"
+WEBAPP_DIR="$ROOT/dserver-webapp/dserver-webapp"
 webapp_stamp() {
     cd "$ROOT" && find devbox/setup-webapp.sh dserver-client-js/src \
         dserver-client-js/package.json dserver-client-js/package-lock.json \
