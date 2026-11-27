@@ -1,7 +1,7 @@
 # dserver-development-stack
 
 [devbox](https://www.jetify.com/devbox)-based development stack for dserver and
-the dtool-lookup-webapp. Services run as native processes (managed by
+the dserver-webapp. Services run as native processes (managed by
 [process-compose](https://github.com/F1bonacc1/process-compose)) on top of Nix
 packages — no containers required.
 
@@ -10,7 +10,7 @@ packages — no containers required.
 This repository provides a complete development environment for:
 
 - **dserver** - REST API for registering, looking up, and searching dtool dataset metadata
-- **dtool-lookup-webapp** - Vue.js web frontend for searching datasets
+- **dserver-webapp** - Vue.js web frontend for searching datasets
 - **SeaweedFS** - S3-compatible object storage for datasets
 - **PostgreSQL** - SQL database for dserver admin metadata
 - **MongoDB** - NoSQL database for dataset search and retrieval
@@ -357,7 +357,7 @@ This repository includes the following submodules:
 | `dserver-notification-plugin`             | Notification extension                            |
 | `dserver-signed-url-plugin`               | Signed URL generation plugin                      |
 | `dserver-token-generator-plugin-oauth2`   | OAuth2 (ORCID) JWT token generator plugin         |
-| `dtool-lookup-webapp`                     | Vue.js web frontend                               |
+| `dserver-webapp`                          | Vue.js web frontend                               |
 | `dserver-client-js`                       | JavaScript/TypeScript client library              |
 
 ## Troubleshooting

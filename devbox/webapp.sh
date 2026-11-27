@@ -6,7 +6,7 @@ set -o pipefail
 set -o nounset
 
 ROOT="${DEVBOX_PROJECT_ROOT:?DEVBOX_PROJECT_ROOT not set}"
-cd "$ROOT/dtool-lookup-webapp/dtool-lookup-webapp"
+cd "$ROOT/dserver-webapp/dserver-webapp"
 
 # The dev server silently moves to the next free port if 8080 is taken, where
 # the readiness probe and the OAuth2 redirects would not find it: fail

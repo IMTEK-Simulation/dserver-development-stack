@@ -14,8 +14,11 @@ cd "$ROOT/dserver-client-js"
 npm install
 npm run build
 
-echo "==> Installing dtool-lookup-webapp dependencies..."
-cd "$ROOT/dtool-lookup-webapp/dtool-lookup-webapp"
-npm install
+echo "==> Installing dserver-webapp dependencies..."
+cd "$ROOT/dserver-webapp/dserver-webapp"
+# Exactly the versions of the committed lock file, as in CI; unlike
+# 'npm install', this never rewrites package-lock.json (e.g. in the format of
+# a different npm version).
+npm ci
 
 echo "==> Node dependencies installed."
